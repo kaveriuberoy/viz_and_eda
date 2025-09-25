@@ -16,7 +16,7 @@ Import weather data.
 ```{r}
 ggp_weather_scatterplot = 
   weather_df |>
-    ggplot(aes(x=tmin, y=tmax))+
+    ggplot(aes(x = tmin, y = tmax)) +
     geom_point()
 
 ggp_weather_scatterplot
@@ -28,3 +28,70 @@ Which ones are missing?
 weather_df |>
   filter(is.na(tmax))
 ```
+
+# fancier scatterplots
+
+mapping color to name variable , alpha for opacity, se removes bar.
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE)
+```
+
+where you define the aesthetics can matter. 
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax)) +
+  geom_point(aes(color = name, size = prcp),alpha = 0.3) +
+  geom_smooth(se = FALSE)
+```
+
+use faceting really quick. 
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax)) +
+  geom_point(aes(color = name),alpha = 0.3, size = 0.8) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ name)
+
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax)) +
+  geom_point(aes(color = name),alpha = 0.3, size = 0.8) +
+  geom_smooth(se = FALSE) +
+  facet_grid(name ~ .)
+```
+
+More interesting scatterplot
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax, color = name, shape = name)) +
+  geom_point(aes(color = name, size = prcp),alpha = 0.3) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ name)
+
+```
+
+LA plot : central park data only, coverts temp to F, makes a scatterplot of min vs max temps, overlays a linear regression line 
+
+```{r}
+
+weather_df |>
+  filter(name == "CentralPark_NY") |>
+  mutate(
+    tmax_fahr = tmax * (9/5) + 32,
+    tmin_fahr = tmin * (9/5) + 32
+  ) |>
+  ggplot(aes(x = tmin_fahr,y = tmax_fahr)) +
+  geom_point() +
+  geom_smooth(se=FALSE, method = "lm")
+
+```
+
+## small things to know. 
+
+
