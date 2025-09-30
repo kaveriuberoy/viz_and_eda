@@ -94,4 +94,148 @@ weather_df |>
 
 ## small things to know. 
 
+Changing the overlay order. 
 
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax, color = name, shape = name)) +
+  geom_smooth(se=FALSE) +
+  geom_point(alpha=0.20)
+
+```
+To look at point density
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax)) +
+  geom_hex()
+
+```
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin,y = tmax)) +
+  geom_point(color = "#191")
+
+```
+
+#Univariate plots
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin)) +
+  geom_histogram(color = "white", fill = "pink")
+
+```
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram()
+
+```
+
+How could we fix this?
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_histogram() +
+  facet_grid(name ~ .)
+
+```
+
+Density plot?
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = 0.3)
+
+```
+
+Box plot 
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = name, y = tmin)) +
+  geom_boxplot(aes(fill = name))
+
+```
+
+Violin plots 
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = name, y = tmin)) +
+  geom_violin(aes(fill = name))
+
+```
+
+Ridge plot 
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = tmin, y = name)) +
+  geom_density_ridges(aes(fill = name), alpha=0.3)
+
+```
+
+LA univariate plots 
+
+```{r}
+
+weather_df |>
+  ggplot(aes(x = prcp, y = name)) +
+  geom_density_ridges(aes(fill = name), alpha = 0.3)
+
+weather_df |>
+  ggplot(aes(x = name, y = prcp)) +
+  geom_boxplot(aes(fill = name))
+
+weather_df |>
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = 0.3)
+
+weather_df |>
+  ggplot(aes(x = name, y = prcp)) +
+  geom_violin(aes(fill = name))
+
+weather_df |>
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_histogram() +
+  facet_grid(name ~ .)
+
+weather_df |>
+  filter(prcp > 5, prcp < 1000) |>
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = 0.3)
+
+```
+
+saving plots. 
+```{r}
+ggp_weather_violin= 
+  weather_df |>
+    ggplot(aes(x = tmin, y = name)) +
+    geom_density_ridges(aes(fill = name), alpha=0.3)
+
+
+ggsave("violin_plot.pdf", ggp_weather_violin,width= 8, height=8)
+
+```
+
+embedding plots 
+
+```{r, fig.width = 6, fig,height = 4}
+ggp_weather_violin
+```
